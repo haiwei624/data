@@ -74,7 +74,7 @@ error    .
 {newline}       linenumber += 1;
 {error}         printf("ERR \n");/* return ERROR; */
 
-
+ 
 %%
 
 main(int argc, char **argv)
