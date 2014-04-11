@@ -1,0 +1,14 @@
+i aaa
+f bd
+i cs
+i dd
+aaa = 1
+bd = 2.1
+cs = 1
+dd = 2
+cs = aaa + dd
+bd = bd + cs
+p cs
+p dd
+p bd
+
