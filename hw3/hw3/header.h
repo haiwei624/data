@@ -141,9 +141,9 @@ typedef struct TypeSpecSemanticValue
 typedef struct CON_Type{
         C_type  const_type;
 	union {
-		int     intval;
-		double  fval;
-		char    *sc; }
+        int     intval;
+        double  fval;
+        char    *sc; }
 		const_u;
 } CON_Type;
 
