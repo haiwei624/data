@@ -2,7 +2,6 @@
 #define __SYMBOL_TABLE_H__
 
 #include "header.h"
-// This file is for reference only, you are not required to follow the implementation. //
 
 
 //SYMBOL_TABLE_PREINSERT_NAME
@@ -11,10 +10,8 @@
 #define SYMBOL_TABLE_VOID_NAME "void"
 #define SYMBOL_TABLE_SYS_LIB_READ "read"
 #define SYMBOL_TABLE_SYS_LIB_FREAD "fread"
-#define HASH_TABLE_SIZE 1024
+#define HASH_TABLE_SIZE 256
 
-//add: define MAX_SCOPE_NUMBER
-#define MAX_SCOPE_NUMBER 1024
 
 typedef enum SymbolAttributeKind
 {
@@ -89,7 +86,7 @@ typedef struct SymbolTableEntry
 typedef struct SymbolTable
 {
     SymbolTableEntry* hashTable[HASH_TABLE_SIZE];
-    SymbolTableEntry* scopeDisplay[MAX_SCOPE_NUMBER];//change pointer to array
+    SymbolTableEntry** scopeDisplay;
     int currentLevel;
     int scopeDisplayElementCount;
 } SymbolTable;
