@@ -1156,7 +1156,8 @@ void checkReturnStmt(AST_NODE* returnNode)
     {
         printErrorMsg(returnNode, RETURN_TYPE_UNMATCH);
         returnNode->dataType = ERROR_TYPE;
-    } else {
+    } 
+    else {
         returnNode->dataType = returnType;
     }
 }

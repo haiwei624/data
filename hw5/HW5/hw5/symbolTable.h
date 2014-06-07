@@ -81,6 +81,7 @@ typedef struct SymbolTableEntry
     SymbolAttribute* attribute;
     int nestingLevel;
 
+    int offset;//new~
 } SymbolTableEntry;
 
 typedef struct SymbolTable

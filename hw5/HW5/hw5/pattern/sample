@@ -1,0 +1,126 @@
+.data 
+_result:    .word 0
+.text 
+fact:
+# prologue sequence
+	sw	$ra, 0($sp) 
+	sw	$fp, -4($sp) 
+	add	$fp, $sp, -4 
+	add	$sp, $sp, -8 
+	lw	$2, _framesize_of_fact
+	sub	$sp,$sp,$2 
+	sw	$8,32($sp)
+	sw	$9,28($sp)
+	sw	$10,24($sp)
+	sw	$11,20($sp)
+	sw	$12,16($sp)
+	sw	$13,12($sp)
+	sw	$14,8($sp)
+	sw	$15,4($sp)
+_begin_fact:
+_Ltest_1:
+      lw    $8, 8($fp)
+      li    $9, 1
+      seq   $10, $8, $9
+	beqz 	$10, _Lexit_1
+      lw    $9, 8($fp)
+ 	move 	$v0,	$9
+ 	j     _end_fact
+	j 	_Lelse_1
+_Lexit_1:
+      lw    $8, 8($fp)
+      li    $11, 1
+      sub   $12, $8, $11
+	addi	$sp, $sp, -4
+      sw    $12, 4($sp)
+	jal	fact
+   addi	$sp, $sp, 4
+	move	$12, $v0
+      lw    $11, 8($fp)
+      mul   $8, $11, $12
+ 	move 	$v0,	$8
+ 	j       _end_fact
+_Lelse_1:
+# epilogue sequence
+_end_fact:
+	lw	$8,32($sp)
+	lw	$9,28($sp)
+	lw	$10,24($sp)
+	lw	$11,20($sp)
+	lw	$12,16($sp)
+	lw	$13,12($sp)
+	lw	$14,8($sp)
+	lw	$15,4($sp)
+	lw	$ra, 4($fp) 
+	add	$sp, $fp, 4 
+	lw	$fp, 0($fp) 
+	jr	$ra
+.data 
+_framesize_of_fact: .word 32
+.data 
+.text 
+main:
+# prologue sequence
+	sw	$ra, 0($sp) 
+	sw	$fp, -4($sp) 
+	add	$fp, $sp, -4 
+	add	$sp, $sp, -8 
+	lw	$2, _framesize_of_main
+	sub	$sp,$sp,$2 
+	sw	$8,32($sp)
+	sw	$9,28($sp)
+	sw	$10,24($sp)
+	sw	$11,20($sp)
+	sw	$12,16($sp)
+	sw	$13,12($sp)
+	sw	$14,8($sp)
+	sw	$15,4($sp)
+_begin_main:
+      li    $v0, 4
+      la    $a0, _m2
+      syscall
+	li 	$v0, 5
+	syscall	
+      sw    $v0, -4($fp)
+_Ltest_3:
+      lw    $8, -4($fp)
+      li    $9, 1
+      sgt   $10, $8, $9
+	beqz 	$10, _Lexit_3
+	addi	$sp, $sp, -4
+	lw	$9, -4($fp)
+      sw    $9, 4($sp)
+	jal	fact
+   addi	$sp, $sp, 4
+	move	$9, $v0
+	sw    $9, _result
+	j 	_Lelse_3
+_Lexit_3:
+      li    $9, 1
+	sw    $9, _result
+_Lelse_3:
+      li    $v0, 4
+      la    $a0, _m4
+      syscall
+	li 	$v0, 1
+      lw    $a0, _result
+      syscall
+# epilogue sequence
+_end_main:
+	lw	$8,32($sp)
+	lw	$9,28($sp)
+	lw	$10,24($sp)
+	lw	$11,20($sp)
+	lw	$12,16($sp)
+	lw	$13,12($sp)
+	lw	$14,8($sp)
+	lw	$15,4($sp)
+	lw	$ra, 4($fp) 
+	add	$sp, $fp, 4 
+	lw	$fp, 0($fp) 
+	li	$v0, 10 
+	syscall	
+.data 
+_framesize_of_main: .word 36
+_m2: .asciiz "Enter a number:"
+_m4: .asciiz "The factorial is "
