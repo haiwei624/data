@@ -55,6 +55,7 @@ typedef struct Parameter
 typedef struct FunctionSignature
 {
     int parametersCount;
+    int ARsize;
     Parameter* parameterList;
     DATA_TYPE returnType;
 } FunctionSignature;

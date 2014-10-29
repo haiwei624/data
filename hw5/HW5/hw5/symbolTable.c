@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdio.h>
 
+extern int ARoffset;
+
+
 int HASH(char * str) {
 	int idx=0;
 	while (*str){
@@ -138,6 +141,21 @@ SymbolTableEntry* retrieveSymbol(char* symbolName)
     return NULL;
 }
 
+int calc_size(TypeDescriptor *typeDescriptor)
+{
+    if(typeDescriptor->kind == SCALAR_TYPE_DESCRIPTOR)
+    {
+        return 4;
+    }
+    else // ARRAY_TYPE_DESCRIPTOR
+    {
+        int dim = typeDescriptor->properties.arrayProperties.dimension;
+        int tot=1,i;
+        for(i=0; i<dim; i++) tot = tot * typeDescriptor->properties.arrayProperties.sizeInEachDimension[i];
+        return tot*4;
+    }
+}
+
 SymbolTableEntry* enterSymbol(char* symbolName, SymbolAttribute* attribute)
 {
     int hashIndex = HASH(symbolName);
@@ -145,6 +163,13 @@ SymbolTableEntry* enterSymbol(char* symbolName, SymbolAttribute* attribute)
     SymbolTableEntry* newEntry = newSymbolTableEntry(symbolTable.currentLevel);
     newEntry->attribute = attribute;
     newEntry->name = symbolName;
+
+    if(attribute->attributeKind == VARIABLE_ATTRIBUTE)
+    {
+        newEntry->offset = ARoffset;
+        ARoffset -= calc_size(attribute->attr.typeDescriptor);
+    }
+    
 
     while(hashChain)
     {

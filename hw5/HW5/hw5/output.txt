@@ -1,0 +1,182 @@
+.data
+_globalsym_result:    .space   4
+_globalsym_n:    .space   4
+.text
+fact:
+# prologue sequence
+sw	$ra, 0($sp)
+sw	$fp, -4($sp)
+add	$fp, $sp, -4
+add	$sp, $sp, -8
+lw	$2, _framesize_fact
+sub	$sp,$sp,$2
+sw  $8,72($sp)
+sw  $9,68($sp)
+sw  $10,64($sp)
+sw  $11,60($sp)
+sw  $12,56($sp)
+sw  $13,52($sp)
+sw  $14,48($sp)
+sw  $15,44($sp)
+sw  $16,40($sp)
+sw  $17,36($sp)
+sw  $18,32($sp)
+sw  $19,28($sp)
+sw  $20,24($sp)
+sw  $21,20($sp)
+sw  $22,16($sp)
+sw  $23,12($sp)
+sw  $24,8($sp)
+sw  $25,4($sp)
+_begin_fact:
+# prologue sequence end
+	 li    $9, 1
+	 la   $v1, -4($fp)
+	 sw   $9, 0($v1)
+	 la   $v1, _globalsym_n
+	 lw   $10, 0($v1)
+	 li    $11, 1
+	 seq   $12, $10, $11
+	 beqz   $12, _Lelse1
+	 li    $13, 1
+	 move   $v0, $13
+	 j   _end_fact
+	 j   _Lexit1
+_Lelse1:
+	 la   $v1, _globalsym_n
+	 lw   $14, 0($v1)
+	 li    $15, 1
+	 sub   $16, $14, $15
+	 la   $v1, _globalsym_n
+	 sw   $16, 0($v1)
+	 la   $v1, _globalsym_n
+	 lw   $17, 0($v1)
+	 li    $18, 1
+	 add   $19, $17, $18
+	 jal fact
+	 move   $20, $v0
+	 mul   $21, $19, $20
+	 la   $v1, -4($fp)
+	 sw   $21, 0($v1)
+	 la   $v1, -4($fp)
+	 lw   $22, 0($v1)
+	 move   $v0, $22
+	 j   _end_fact
+_Lexit1:
+# epilogue sequence
+_end_fact:
+lw  $8,72($sp)
+lw  $9,68($sp)
+lw  $10,64($sp)
+lw  $11,60($sp)
+lw  $12,56($sp)
+lw  $13,52($sp)
+lw  $14,48($sp)
+lw  $15,44($sp)
+lw  $16,40($sp)
+lw  $17,36($sp)
+lw  $18,32($sp)
+lw  $19,28($sp)
+lw  $20,24($sp)
+lw  $21,20($sp)
+lw  $22,16($sp)
+lw  $23,12($sp)
+lw  $24,8($sp)
+lw  $25,4($sp)
+lw	$ra, 4($fp)
+add	$sp, $fp, 4
+lw	$fp, 0($fp)
+jr	$ra
+.data
+_framesize_fact: .word 1032
+# epilogue sequence end
+.text
+main:
+# prologue sequence
+sw	$ra, 0($sp)
+sw	$fp, -4($sp)
+add	$fp, $sp, -4
+add	$sp, $sp, -8
+lw	$2, _framesize_main
+sub	$sp,$sp,$2
+sw  $8,72($sp)
+sw  $9,68($sp)
+sw  $10,64($sp)
+sw  $11,60($sp)
+sw  $12,56($sp)
+sw  $13,52($sp)
+sw  $14,48($sp)
+sw  $15,44($sp)
+sw  $16,40($sp)
+sw  $17,36($sp)
+sw  $18,32($sp)
+sw  $19,28($sp)
+sw  $20,24($sp)
+sw  $21,20($sp)
+sw  $22,16($sp)
+sw  $23,12($sp)
+sw  $24,8($sp)
+sw  $25,4($sp)
+_begin_main:
+# prologue sequence end
+	 li   $v0, 4
+	 la   $a0, _str1
+	 syscall
+	 li   $v0, 5
+	 syscall
+	 move   $23, $v0
+	 la   $v1, _globalsym_n
+	 sw   $23, 0($v1)
+	 la   $v1, _globalsym_n
+	 lw   $24, 0($v1)
+	 li    $25, 1
+	 sgt   $8, $24, $25
+	 beqz   $8, _Lelse2
+	 jal fact
+	 move   $9, $v0
+	 la   $v1, _globalsym_result
+	 sw   $9, 0($v1)
+	 j   _Lexit2
+_Lelse2:
+	 li    $10, 1
+	 la   $v1, _globalsym_result
+	 sw   $10, 0($v1)
+_Lexit2:
+	 li   $v0, 4
+	 la   $a0, _str2
+	 syscall
+	 la   $v1, _globalsym_result
+	 lw   $11, 0($v1)
+	 li   $v0, 1
+	 move   $a0, $11
+	 syscall
+# epilogue sequence
+_end_main:
+lw  $8,72($sp)
+lw  $9,68($sp)
+lw  $10,64($sp)
+lw  $11,60($sp)
+lw  $12,56($sp)
+lw  $13,52($sp)
+lw  $14,48($sp)
+lw  $15,44($sp)
+lw  $16,40($sp)
+lw  $17,36($sp)
+lw  $18,32($sp)
+lw  $19,28($sp)
+lw  $20,24($sp)
+lw  $21,20($sp)
+lw  $22,16($sp)
+lw  $23,12($sp)
+lw  $24,8($sp)
+lw  $25,4($sp)
+lw	$ra, 4($fp)
+add	$sp, $fp, 4
+lw	$fp, 0($fp)
+li	$v0, 10
+  syscall
+.data
+_framesize_main: .word 1028
+_str1: .asciiz "Enter a number:"
+_str2: .asciiz "The factorial is "
+# epilogue sequence end

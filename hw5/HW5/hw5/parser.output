@@ -1,0 +1,2586 @@
+Terminals unused in grammar
+
+   MK_DOT
+   ERROR
+
+
+状态 197 conflicts: 1 shift/reduce
+
+
+语法
+
+    0 $accept: program $end
+
+    1 program: global_decl_list
+    2        | /* 空 */
+
+    3 global_decl_list: global_decl_list global_decl
+    4                 | global_decl
+
+    5 global_decl: decl_list function_decl
+    6            | function_decl
+
+    7 function_decl: function_head MK_LPAREN opt_param_list MK_RPAREN MK_LBRACE block MK_RBRACE
+
+    8 function_head: type ID
+    9              | VOID ID
+   10              | ID ID
+
+   11 opt_param_list: param_list
+   12               | /* 空 */
+
+   13 param_list: param_list MK_COMMA param
+   14           | param
+
+   15 param: type ID
+   16      | ID ID
+   17      | type ID dim_fn
+   18      | ID ID dim_fn
+
+   19 dim_fn: MK_LB expr_null MK_RB
+   20       | dim_fn MK_LB expr MK_RB
+
+   21 expr_null: expr
+   22          | /* 空 */
+
+   23 block: decl_list stmt_list
+   24      | stmt_list
+   25      | decl_list
+   26      | /* 空 */
+
+   27 decl_list: decl_list decl
+   28          | decl
+
+   29 decl: type_decl
+   30     | var_decl
+
+   31 type_decl: TYPEDEF type id_list MK_SEMICOLON
+   32          | TYPEDEF VOID id_list MK_SEMICOLON
+
+   33 var_decl: type init_id_list MK_SEMICOLON
+   34         | ID init_id_list MK_SEMICOLON
+
+   35 type: INT
+   36     | FLOAT
+
+   37 id_list: ID
+   38        | id_list MK_COMMA ID
+   39        | id_list MK_COMMA ID dim_decl
+   40        | ID dim_decl
+
+   41 dim_decl: MK_LB cexpr MK_RB
+   42         | dim_decl MK_LB cexpr MK_RB
+
+   43 cexpr: cexpr OP_PLUS mcexpr
+   44      | cexpr OP_MINUS mcexpr
+   45      | mcexpr
+
+   46 mcexpr: mcexpr OP_TIMES cfactor
+   47       | mcexpr OP_DIVIDE cfactor
+   48       | cfactor
+
+   49 cfactor: CONST
+   50        | MK_LPAREN cexpr MK_RPAREN
+
+   51 init_id_list: init_id
+   52             | init_id_list MK_COMMA init_id
+
+   53 init_id: ID
+   54        | ID dim_decl
+   55        | ID OP_ASSIGN relop_expr
+
+   56 stmt_list: stmt_list stmt
+   57          | stmt
+
+   58 stmt: MK_LBRACE block MK_RBRACE
+   59     | WHILE MK_LPAREN test MK_RPAREN stmt
+   60     | FOR MK_LPAREN assign_expr_list MK_SEMICOLON relop_expr_list MK_SEMICOLON assign_expr_list MK_RPAREN stmt
+   61     | var_ref OP_ASSIGN relop_expr MK_SEMICOLON
+   62     | IF MK_LPAREN test MK_RPAREN stmt
+   63     | IF MK_LPAREN test MK_RPAREN stmt ELSE stmt
+   64     | ID MK_LPAREN relop_expr_list MK_RPAREN MK_SEMICOLON
+   65     | MK_SEMICOLON
+   66     | RETURN MK_SEMICOLON
+   67     | RETURN relop_expr MK_SEMICOLON
+
+   68 assign_expr_list: nonempty_assign_expr_list
+   69                 | /* 空 */
+
+   70 nonempty_assign_expr_list: nonempty_assign_expr_list MK_COMMA assign_expr
+   71                          | assign_expr
+
+   72 test: assign_expr
+
+   73 assign_expr: ID OP_ASSIGN relop_expr
+   74            | relop_expr
+
+   75 relop_expr: relop_term
+   76           | relop_expr OP_OR relop_term
+
+   77 relop_term: relop_factor
+   78           | relop_term OP_AND relop_factor
+
+   79 relop_factor: expr
+   80             | expr rel_op expr
+
+   81 rel_op: OP_EQ
+   82       | OP_GE
+   83       | OP_LE
+   84       | OP_NE
+   85       | OP_GT
+   86       | OP_LT
+
+   87 relop_expr_list: nonempty_relop_expr_list
+   88                | /* 空 */
+
+   89 nonempty_relop_expr_list: nonempty_relop_expr_list MK_COMMA relop_expr
+   90                         | relop_expr
+
+   91 expr: expr add_op term
+   92     | term
+
+   93 add_op: OP_PLUS
+   94       | OP_MINUS
+
+   95 term: term mul_op factor
+   96     | factor
+
+   97 mul_op: OP_TIMES
+   98       | OP_DIVIDE
+
+   99 factor: MK_LPAREN relop_expr MK_RPAREN
+  100       | OP_MINUS MK_LPAREN relop_expr MK_RPAREN
+  101       | OP_NOT MK_LPAREN relop_expr MK_RPAREN
+  102       | CONST
+  103       | OP_MINUS CONST
+  104       | OP_NOT CONST
+  105       | ID MK_LPAREN relop_expr_list MK_RPAREN
+  106       | OP_MINUS ID MK_LPAREN relop_expr_list MK_RPAREN
+  107       | OP_NOT ID MK_LPAREN relop_expr_list MK_RPAREN
+  108       | var_ref
+  109       | OP_MINUS var_ref
+  110       | OP_NOT var_ref
+
+  111 var_ref: ID
+  112        | ID dim_list
+
+  113 dim_list: dim_list MK_LB expr MK_RB
+  114         | MK_LB expr MK_RB
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+ID (258) 8 9 10 15 16 17 18 34 37 38 39 40 53 54 55 64 73 105 106 107
+    111 112
+CONST (259) 49 102 103 104
+VOID (260) 9 32
+INT (261) 35
+FLOAT (262) 36
+IF (263) 62 63
+ELSE (264) 63
+WHILE (265) 59
+FOR (266) 60
+TYPEDEF (267) 31 32
+OP_ASSIGN (268) 55 61 73
+OP_OR (269) 76
+OP_AND (270) 78
+OP_NOT (271) 101 104 107 110
+OP_EQ (272) 81
+OP_NE (273) 84
+OP_GT (274) 85
+OP_LT (275) 86
+OP_GE (276) 82
+OP_LE (277) 83
+OP_PLUS (278) 43 93
+OP_MINUS (279) 44 94 100 103 106 109
+OP_TIMES (280) 46 97
+OP_DIVIDE (281) 47 98
+MK_LB (282) 19 20 41 42 113 114
+MK_RB (283) 19 20 41 42 113 114
+MK_LPAREN (284) 7 50 59 60 62 63 64 99 100 101 105 106 107
+MK_RPAREN (285) 7 50 59 60 62 63 64 99 100 101 105 106 107
+MK_LBRACE (286) 7 58
+MK_RBRACE (287) 7 58
+MK_COMMA (288) 13 38 39 52 70 89
+MK_SEMICOLON (289) 31 32 33 34 60 61 64 65 66 67
+MK_DOT (290)
+ERROR (291)
+RETURN (292) 66 67
+
+
+Nonterminals, with rules where they appear
+
+$accept (38)
+    左： 0
+program (39)
+    左： 1 2, 右： 0
+global_decl_list (40)
+    左： 3 4, 右： 1 3
+global_decl (41)
+    左： 5 6, 右： 3 4
+function_decl (42)
+    左： 7, 右： 5 6
+function_head (43)
+    左： 8 9 10, 右： 7
+opt_param_list (44)
+    左： 11 12, 右： 7
+param_list (45)
+    左： 13 14, 右： 11 13
+param (46)
+    左： 15 16 17 18, 右： 13 14
+dim_fn (47)
+    左： 19 20, 右： 17 18 20
+expr_null (48)
+    左： 21 22, 右： 19
+block (49)
+    左： 23 24 25 26, 右： 7 58
+decl_list (50)
+    左： 27 28, 右： 5 23 25 27
+decl (51)
+    左： 29 30, 右： 27 28
+type_decl (52)
+    左： 31 32, 右： 29
+var_decl (53)
+    左： 33 34, 右： 30
+type (54)
+    左： 35 36, 右： 8 15 17 31 33
+id_list (55)
+    左： 37 38 39 40, 右： 31 32 38 39
+dim_decl (56)
+    左： 41 42, 右： 39 40 42 54
+cexpr (57)
+    左： 43 44 45, 右： 41 42 43 44 50
+mcexpr (58)
+    左： 46 47 48, 右： 43 44 45 46 47
+cfactor (59)
+    左： 49 50, 右： 46 47 48
+init_id_list (60)
+    左： 51 52, 右： 33 34 52
+init_id (61)
+    左： 53 54 55, 右： 51 52
+stmt_list (62)
+    左： 56 57, 右： 23 24 56
+stmt (63)
+    左： 58 59 60 61 62 63 64 65 66 67, 右： 56 57 59 60 62 63
+assign_expr_list (64)
+    左： 68 69, 右： 60
+nonempty_assign_expr_list (65)
+    左： 70 71, 右： 68 70
+test (66)
+    左： 72, 右： 59 62 63
+assign_expr (67)
+    左： 73 74, 右： 70 71 72
+relop_expr (68)
+    左： 75 76, 右： 55 61 67 73 74 76 89 90 99 100 101
+relop_term (69)
+    左： 77 78, 右： 75 76 78
+relop_factor (70)
+    左： 79 80, 右： 77 78
+rel_op (71)
+    左： 81 82 83 84 85 86, 右： 80
+relop_expr_list (72)
+    左： 87 88, 右： 60 64 105 106 107
+nonempty_relop_expr_list (73)
+    左： 89 90, 右： 87 89
+expr (74)
+    左： 91 92, 右： 20 21 79 80 91 113 114
+add_op (75)
+    左： 93 94, 右： 91
+term (76)
+    左： 95 96, 右： 91 92 95
+mul_op (77)
+    左： 97 98, 右： 95
+factor (78)
+    左： 99 100 101 102 103 104 105 106 107 108 109 110, 右： 95
+    96
+var_ref (79)
+    左： 111 112, 右： 61 108 109 110
+dim_list (80)
+    左： 113 114, 右： 112 113
+
+
+状态 0
+
+    0 $accept: . program $end
+
+    ID       shift, and go to state 1
+    VOID     shift, and go to state 2
+    INT      shift, and go to state 3
+    FLOAT    shift, and go to state 4
+    TYPEDEF  shift, and go to state 5
+
+    $default  reduce using rule 2 (program)
+
+    program           转到状态 6
+    global_decl_list  转到状态 7
+    global_decl       转到状态 8
+    function_decl     转到状态 9
+    function_head     转到状态 10
+    decl_list         转到状态 11
+    decl              转到状态 12
+    type_decl         转到状态 13
+    var_decl          转到状态 14
+    type              转到状态 15
+
+
+状态 1
+
+   10 function_head: ID . ID
+   34 var_decl: ID . init_id_list MK_SEMICOLON
+
+    ID  shift, and go to state 16
+
+    init_id_list  转到状态 17
+    init_id       转到状态 18
+
+
+状态 2
+
+    9 function_head: VOID . ID
+
+    ID  shift, and go to state 19
+
+
+状态 3
+
+   35 type: INT .
+
+    $default  reduce using rule 35 (type)
+
+
+状态 4
+
+   36 type: FLOAT .
+
+    $default  reduce using rule 36 (type)
+
+
+状态 5
+
+   31 type_decl: TYPEDEF . type id_list MK_SEMICOLON
+   32          | TYPEDEF . VOID id_list MK_SEMICOLON
+
+    VOID   shift, and go to state 20
+    INT    shift, and go to state 3
+    FLOAT  shift, and go to state 4
+
+    type  转到状态 21
+
+
+状态 6
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 22
+
+
+状态 7
+
+    1 program: global_decl_list .
+    3 global_decl_list: global_decl_list . global_decl
+
+    ID       shift, and go to state 1
+    VOID     shift, and go to state 2
+    INT      shift, and go to state 3
+    FLOAT    shift, and go to state 4
+    TYPEDEF  shift, and go to state 5
+
+    $default  reduce using rule 1 (program)
+
+    global_decl    转到状态 23
+    function_decl  转到状态 9
+    function_head  转到状态 10
+    decl_list      转到状态 11
+    decl           转到状态 12
+    type_decl      转到状态 13
+    var_decl       转到状态 14
+    type           转到状态 15
+
+
+状态 8
+
+    4 global_decl_list: global_decl .
+
+    $default  reduce using rule 4 (global_decl_list)
+
+
+状态 9
+
+    6 global_decl: function_decl .
+
+    $default  reduce using rule 6 (global_decl)
+
+
+状态 10
+
+    7 function_decl: function_head . MK_LPAREN opt_param_list MK_RPAREN MK_LBRACE block MK_RBRACE
+
+    MK_LPAREN  shift, and go to state 24
+
+
+状态 11
+
+    5 global_decl: decl_list . function_decl
+   27 decl_list: decl_list . decl
+
+    ID       shift, and go to state 1
+    VOID     shift, and go to state 2
+    INT      shift, and go to state 3
+    FLOAT    shift, and go to state 4
+    TYPEDEF  shift, and go to state 5
+
+    function_decl  转到状态 25
+    function_head  转到状态 10
+    decl           转到状态 26
+    type_decl      转到状态 13
+    var_decl       转到状态 14
+    type           转到状态 15
+
+
+状态 12
+
+   28 decl_list: decl .
+
+    $default  reduce using rule 28 (decl_list)
+
+
+状态 13
+
+   29 decl: type_decl .
+
+    $default  reduce using rule 29 (decl)
+
+
+状态 14
+
+   30 decl: var_decl .
+
+    $default  reduce using rule 30 (decl)
+
+
+状态 15
+
+    8 function_head: type . ID
+   33 var_decl: type . init_id_list MK_SEMICOLON
+
+    ID  shift, and go to state 27
+
+    init_id_list  转到状态 28
+    init_id       转到状态 18
+
+
+状态 16
+
+   10 function_head: ID ID .
+   53 init_id: ID .
+   54        | ID . dim_decl
+   55        | ID . OP_ASSIGN relop_expr
+
+    OP_ASSIGN  shift, and go to state 29
+    MK_LB      shift, and go to state 30
+
+    MK_LPAREN  reduce using rule 10 (function_head)
+    $default   reduce using rule 53 (init_id)
+
+    dim_decl  转到状态 31
+
+
+状态 17
+
+   34 var_decl: ID init_id_list . MK_SEMICOLON
+   52 init_id_list: init_id_list . MK_COMMA init_id
+
+    MK_COMMA      shift, and go to state 32
+    MK_SEMICOLON  shift, and go to state 33
+
+
+状态 18
+
+   51 init_id_list: init_id .
+
+    $default  reduce using rule 51 (init_id_list)
+
+
+状态 19
+
+    9 function_head: VOID ID .
+
+    $default  reduce using rule 9 (function_head)
+
+
+状态 20
+
+   32 type_decl: TYPEDEF VOID . id_list MK_SEMICOLON
+
+    ID  shift, and go to state 34
+
+    id_list  转到状态 35
+
+
+状态 21
+
+   31 type_decl: TYPEDEF type . id_list MK_SEMICOLON
+
+    ID  shift, and go to state 34
+
+    id_list  转到状态 36
+
+
+状态 22
+
+    0 $accept: program $end .
+
+    $default  接受
+
+
+状态 23
+
+    3 global_decl_list: global_decl_list global_decl .
+
+    $default  reduce using rule 3 (global_decl_list)
+
+
+状态 24
+
+    7 function_decl: function_head MK_LPAREN . opt_param_list MK_RPAREN MK_LBRACE block MK_RBRACE
+
+    ID     shift, and go to state 37
+    INT    shift, and go to state 3
+    FLOAT  shift, and go to state 4
+
+    $default  reduce using rule 12 (opt_param_list)
+
+    opt_param_list  转到状态 38
+    param_list      转到状态 39
+    param           转到状态 40
+    type            转到状态 41
+
+
+状态 25
+
+    5 global_decl: decl_list function_decl .
+
+    $default  reduce using rule 5 (global_decl)
+
+
+状态 26
+
+   27 decl_list: decl_list decl .
+
+    $default  reduce using rule 27 (decl_list)
+
+
+状态 27
+
+    8 function_head: type ID .
+   53 init_id: ID .
+   54        | ID . dim_decl
+   55        | ID . OP_ASSIGN relop_expr
+
+    OP_ASSIGN  shift, and go to state 29
+    MK_LB      shift, and go to state 30
+
+    MK_LPAREN  reduce using rule 8 (function_head)
+    $default   reduce using rule 53 (init_id)
+
+    dim_decl  转到状态 31
+
+
+状态 28
+
+   33 var_decl: type init_id_list . MK_SEMICOLON
+   52 init_id_list: init_id_list . MK_COMMA init_id
+
+    MK_COMMA      shift, and go to state 32
+    MK_SEMICOLON  shift, and go to state 42
+
+
+状态 29
+
+   55 init_id: ID OP_ASSIGN . relop_expr
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_expr    转到状态 48
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 30
+
+   41 dim_decl: MK_LB . cexpr MK_RB
+
+    CONST      shift, and go to state 55
+    MK_LPAREN  shift, and go to state 56
+
+    cexpr    转到状态 57
+    mcexpr   转到状态 58
+    cfactor  转到状态 59
+
+
+状态 31
+
+   42 dim_decl: dim_decl . MK_LB cexpr MK_RB
+   54 init_id: ID dim_decl .
+
+    MK_LB  shift, and go to state 60
+
+    $default  reduce using rule 54 (init_id)
+
+
+状态 32
+
+   52 init_id_list: init_id_list MK_COMMA . init_id
+
+    ID  shift, and go to state 61
+
+    init_id  转到状态 62
+
+
+状态 33
+
+   34 var_decl: ID init_id_list MK_SEMICOLON .
+
+    $default  reduce using rule 34 (var_decl)
+
+
+状态 34
+
+   37 id_list: ID .
+   40        | ID . dim_decl
+
+    MK_LB  shift, and go to state 30
+
+    $default  reduce using rule 37 (id_list)
+
+    dim_decl  转到状态 63
+
+
+状态 35
+
+   32 type_decl: TYPEDEF VOID id_list . MK_SEMICOLON
+   38 id_list: id_list . MK_COMMA ID
+   39        | id_list . MK_COMMA ID dim_decl
+
+    MK_COMMA      shift, and go to state 64
+    MK_SEMICOLON  shift, and go to state 65
+
+
+状态 36
+
+   31 type_decl: TYPEDEF type id_list . MK_SEMICOLON
+   38 id_list: id_list . MK_COMMA ID
+   39        | id_list . MK_COMMA ID dim_decl
+
+    MK_COMMA      shift, and go to state 64
+    MK_SEMICOLON  shift, and go to state 66
+
+
+状态 37
+
+   16 param: ID . ID
+   18      | ID . ID dim_fn
+
+    ID  shift, and go to state 67
+
+
+状态 38
+
+    7 function_decl: function_head MK_LPAREN opt_param_list . MK_RPAREN MK_LBRACE block MK_RBRACE
+
+    MK_RPAREN  shift, and go to state 68
+
+
+状态 39
+
+   11 opt_param_list: param_list .
+   13 param_list: param_list . MK_COMMA param
+
+    MK_COMMA  shift, and go to state 69
+
+    $default  reduce using rule 11 (opt_param_list)
+
+
+状态 40
+
+   14 param_list: param .
+
+    $default  reduce using rule 14 (param_list)
+
+
+状态 41
+
+   15 param: type . ID
+   17      | type . ID dim_fn
+
+    ID  shift, and go to state 70
+
+
+状态 42
+
+   33 var_decl: type init_id_list MK_SEMICOLON .
+
+    $default  reduce using rule 33 (var_decl)
+
+
+状态 43
+
+  105 factor: ID . MK_LPAREN relop_expr_list MK_RPAREN
+  111 var_ref: ID .
+  112        | ID . dim_list
+
+    MK_LB      shift, and go to state 71
+    MK_LPAREN  shift, and go to state 72
+
+    $default  reduce using rule 111 (var_ref)
+
+    dim_list  转到状态 73
+
+
+状态 44
+
+  102 factor: CONST .
+
+    $default  reduce using rule 102 (factor)
+
+
+状态 45
+
+  101 factor: OP_NOT . MK_LPAREN relop_expr MK_RPAREN
+  104       | OP_NOT . CONST
+  107       | OP_NOT . ID MK_LPAREN relop_expr_list MK_RPAREN
+  110       | OP_NOT . var_ref
+
+    ID         shift, and go to state 74
+    CONST      shift, and go to state 75
+    MK_LPAREN  shift, and go to state 76
+
+    var_ref  转到状态 77
+
+
+状态 46
+
+  100 factor: OP_MINUS . MK_LPAREN relop_expr MK_RPAREN
+  103       | OP_MINUS . CONST
+  106       | OP_MINUS . ID MK_LPAREN relop_expr_list MK_RPAREN
+  109       | OP_MINUS . var_ref
+
+    ID         shift, and go to state 78
+    CONST      shift, and go to state 79
+    MK_LPAREN  shift, and go to state 80
+
+    var_ref  转到状态 81
+
+
+状态 47
+
+   99 factor: MK_LPAREN . relop_expr MK_RPAREN
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_expr    转到状态 82
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 48
+
+   55 init_id: ID OP_ASSIGN relop_expr .
+   76 relop_expr: relop_expr . OP_OR relop_term
+
+    OP_OR  shift, and go to state 83
+
+    $default  reduce using rule 55 (init_id)
+
+
+状态 49
+
+   75 relop_expr: relop_term .
+   78 relop_term: relop_term . OP_AND relop_factor
+
+    OP_AND  shift, and go to state 84
+
+    $default  reduce using rule 75 (relop_expr)
+
+
+状态 50
+
+   77 relop_term: relop_factor .
+
+    $default  reduce using rule 77 (relop_term)
+
+
+状态 51
+
+   79 relop_factor: expr .
+   80             | expr . rel_op expr
+   91 expr: expr . add_op term
+
+    OP_EQ     shift, and go to state 85
+    OP_NE     shift, and go to state 86
+    OP_GT     shift, and go to state 87
+    OP_LT     shift, and go to state 88
+    OP_GE     shift, and go to state 89
+    OP_LE     shift, and go to state 90
+    OP_PLUS   shift, and go to state 91
+    OP_MINUS  shift, and go to state 92
+
+    $default  reduce using rule 79 (relop_factor)
+
+    rel_op  转到状态 93
+    add_op  转到状态 94
+
+
+状态 52
+
+   92 expr: term .
+   95 term: term . mul_op factor
+
+    OP_TIMES   shift, and go to state 95
+    OP_DIVIDE  shift, and go to state 96
+
+    $default  reduce using rule 92 (expr)
+
+    mul_op  转到状态 97
+
+
+状态 53
+
+   96 term: factor .
+
+    $default  reduce using rule 96 (term)
+
+
+状态 54
+
+  108 factor: var_ref .
+
+    $default  reduce using rule 108 (factor)
+
+
+状态 55
+
+   49 cfactor: CONST .
+
+    $default  reduce using rule 49 (cfactor)
+
+
+状态 56
+
+   50 cfactor: MK_LPAREN . cexpr MK_RPAREN
+
+    CONST      shift, and go to state 55
+    MK_LPAREN  shift, and go to state 56
+
+    cexpr    转到状态 98
+    mcexpr   转到状态 58
+    cfactor  转到状态 59
+
+
+状态 57
+
+   41 dim_decl: MK_LB cexpr . MK_RB
+   43 cexpr: cexpr . OP_PLUS mcexpr
+   44      | cexpr . OP_MINUS mcexpr
+
+    OP_PLUS   shift, and go to state 99
+    OP_MINUS  shift, and go to state 100
+    MK_RB     shift, and go to state 101
+
+
+状态 58
+
+   45 cexpr: mcexpr .
+   46 mcexpr: mcexpr . OP_TIMES cfactor
+   47       | mcexpr . OP_DIVIDE cfactor
+
+    OP_TIMES   shift, and go to state 102
+    OP_DIVIDE  shift, and go to state 103
+
+    $default  reduce using rule 45 (cexpr)
+
+
+状态 59
+
+   48 mcexpr: cfactor .
+
+    $default  reduce using rule 48 (mcexpr)
+
+
+状态 60
+
+   42 dim_decl: dim_decl MK_LB . cexpr MK_RB
+
+    CONST      shift, and go to state 55
+    MK_LPAREN  shift, and go to state 56
+
+    cexpr    转到状态 104
+    mcexpr   转到状态 58
+    cfactor  转到状态 59
+
+
+状态 61
+
+   53 init_id: ID .
+   54        | ID . dim_decl
+   55        | ID . OP_ASSIGN relop_expr
+
+    OP_ASSIGN  shift, and go to state 29
+    MK_LB      shift, and go to state 30
+
+    $default  reduce using rule 53 (init_id)
+
+    dim_decl  转到状态 31
+
+
+状态 62
+
+   52 init_id_list: init_id_list MK_COMMA init_id .
+
+    $default  reduce using rule 52 (init_id_list)
+
+
+状态 63
+
+   40 id_list: ID dim_decl .
+   42 dim_decl: dim_decl . MK_LB cexpr MK_RB
+
+    MK_LB  shift, and go to state 60
+
+    $default  reduce using rule 40 (id_list)
+
+
+状态 64
+
+   38 id_list: id_list MK_COMMA . ID
+   39        | id_list MK_COMMA . ID dim_decl
+
+    ID  shift, and go to state 105
+
+
+状态 65
+
+   32 type_decl: TYPEDEF VOID id_list MK_SEMICOLON .
+
+    $default  reduce using rule 32 (type_decl)
+
+
+状态 66
+
+   31 type_decl: TYPEDEF type id_list MK_SEMICOLON .
+
+    $default  reduce using rule 31 (type_decl)
+
+
+状态 67
+
+   16 param: ID ID .
+   18      | ID ID . dim_fn
+
+    MK_LB  shift, and go to state 106
+
+    $default  reduce using rule 16 (param)
+
+    dim_fn  转到状态 107
+
+
+状态 68
+
+    7 function_decl: function_head MK_LPAREN opt_param_list MK_RPAREN . MK_LBRACE block MK_RBRACE
+
+    MK_LBRACE  shift, and go to state 108
+
+
+状态 69
+
+   13 param_list: param_list MK_COMMA . param
+
+    ID     shift, and go to state 37
+    INT    shift, and go to state 3
+    FLOAT  shift, and go to state 4
+
+    param  转到状态 109
+    type   转到状态 41
+
+
+状态 70
+
+   15 param: type ID .
+   17      | type ID . dim_fn
+
+    MK_LB  shift, and go to state 106
+
+    $default  reduce using rule 15 (param)
+
+    dim_fn  转到状态 110
+
+
+状态 71
+
+  114 dim_list: MK_LB . expr MK_RB
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    expr     转到状态 111
+    term     转到状态 52
+    factor   转到状态 53
+    var_ref  转到状态 54
+
+
+状态 72
+
+  105 factor: ID MK_LPAREN . relop_expr_list MK_RPAREN
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 88 (relop_expr_list)
+
+    relop_expr                转到状态 112
+    relop_term                转到状态 49
+    relop_factor              转到状态 50
+    relop_expr_list           转到状态 113
+    nonempty_relop_expr_list  转到状态 114
+    expr                      转到状态 51
+    term                      转到状态 52
+    factor                    转到状态 53
+    var_ref                   转到状态 54
+
+
+状态 73
+
+  112 var_ref: ID dim_list .
+  113 dim_list: dim_list . MK_LB expr MK_RB
+
+    MK_LB  shift, and go to state 115
+
+    $default  reduce using rule 112 (var_ref)
+
+
+状态 74
+
+  107 factor: OP_NOT ID . MK_LPAREN relop_expr_list MK_RPAREN
+  111 var_ref: ID .
+  112        | ID . dim_list
+
+    MK_LB      shift, and go to state 71
+    MK_LPAREN  shift, and go to state 116
+
+    $default  reduce using rule 111 (var_ref)
+
+    dim_list  转到状态 73
+
+
+状态 75
+
+  104 factor: OP_NOT CONST .
+
+    $default  reduce using rule 104 (factor)
+
+
+状态 76
+
+  101 factor: OP_NOT MK_LPAREN . relop_expr MK_RPAREN
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_expr    转到状态 117
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 77
+
+  110 factor: OP_NOT var_ref .
+
+    $default  reduce using rule 110 (factor)
+
+
+状态 78
+
+  106 factor: OP_MINUS ID . MK_LPAREN relop_expr_list MK_RPAREN
+  111 var_ref: ID .
+  112        | ID . dim_list
+
+    MK_LB      shift, and go to state 71
+    MK_LPAREN  shift, and go to state 118
+
+    $default  reduce using rule 111 (var_ref)
+
+    dim_list  转到状态 73
+
+
+状态 79
+
+  103 factor: OP_MINUS CONST .
+
+    $default  reduce using rule 103 (factor)
+
+
+状态 80
+
+  100 factor: OP_MINUS MK_LPAREN . relop_expr MK_RPAREN
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_expr    转到状态 119
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 81
+
+  109 factor: OP_MINUS var_ref .
+
+    $default  reduce using rule 109 (factor)
+
+
+状态 82
+
+   76 relop_expr: relop_expr . OP_OR relop_term
+   99 factor: MK_LPAREN relop_expr . MK_RPAREN
+
+    OP_OR      shift, and go to state 83
+    MK_RPAREN  shift, and go to state 120
+
+
+状态 83
+
+   76 relop_expr: relop_expr OP_OR . relop_term
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_term    转到状态 121
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 84
+
+   78 relop_term: relop_term OP_AND . relop_factor
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_factor  转到状态 122
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 85
+
+   81 rel_op: OP_EQ .
+
+    $default  reduce using rule 81 (rel_op)
+
+
+状态 86
+
+   84 rel_op: OP_NE .
+
+    $default  reduce using rule 84 (rel_op)
+
+
+状态 87
+
+   85 rel_op: OP_GT .
+
+    $default  reduce using rule 85 (rel_op)
+
+
+状态 88
+
+   86 rel_op: OP_LT .
+
+    $default  reduce using rule 86 (rel_op)
+
+
+状态 89
+
+   82 rel_op: OP_GE .
+
+    $default  reduce using rule 82 (rel_op)
+
+
+状态 90
+
+   83 rel_op: OP_LE .
+
+    $default  reduce using rule 83 (rel_op)
+
+
+状态 91
+
+   93 add_op: OP_PLUS .
+
+    $default  reduce using rule 93 (add_op)
+
+
+状态 92
+
+   94 add_op: OP_MINUS .
+
+    $default  reduce using rule 94 (add_op)
+
+
+状态 93
+
+   80 relop_factor: expr rel_op . expr
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    expr     转到状态 123
+    term     转到状态 52
+    factor   转到状态 53
+    var_ref  转到状态 54
+
+
+状态 94
+
+   91 expr: expr add_op . term
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    term     转到状态 124
+    factor   转到状态 53
+    var_ref  转到状态 54
+
+
+状态 95
+
+   97 mul_op: OP_TIMES .
+
+    $default  reduce using rule 97 (mul_op)
+
+
+状态 96
+
+   98 mul_op: OP_DIVIDE .
+
+    $default  reduce using rule 98 (mul_op)
+
+
+状态 97
+
+   95 term: term mul_op . factor
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    factor   转到状态 125
+    var_ref  转到状态 54
+
+
+状态 98
+
+   43 cexpr: cexpr . OP_PLUS mcexpr
+   44      | cexpr . OP_MINUS mcexpr
+   50 cfactor: MK_LPAREN cexpr . MK_RPAREN
+
+    OP_PLUS    shift, and go to state 99
+    OP_MINUS   shift, and go to state 100
+    MK_RPAREN  shift, and go to state 126
+
+
+状态 99
+
+   43 cexpr: cexpr OP_PLUS . mcexpr
+
+    CONST      shift, and go to state 55
+    MK_LPAREN  shift, and go to state 56
+
+    mcexpr   转到状态 127
+    cfactor  转到状态 59
+
+
+状态 100
+
+   44 cexpr: cexpr OP_MINUS . mcexpr
+
+    CONST      shift, and go to state 55
+    MK_LPAREN  shift, and go to state 56
+
+    mcexpr   转到状态 128
+    cfactor  转到状态 59
+
+
+状态 101
+
+   41 dim_decl: MK_LB cexpr MK_RB .
+
+    $default  reduce using rule 41 (dim_decl)
+
+
+状态 102
+
+   46 mcexpr: mcexpr OP_TIMES . cfactor
+
+    CONST      shift, and go to state 55
+    MK_LPAREN  shift, and go to state 56
+
+    cfactor  转到状态 129
+
+
+状态 103
+
+   47 mcexpr: mcexpr OP_DIVIDE . cfactor
+
+    CONST      shift, and go to state 55
+    MK_LPAREN  shift, and go to state 56
+
+    cfactor  转到状态 130
+
+
+状态 104
+
+   42 dim_decl: dim_decl MK_LB cexpr . MK_RB
+   43 cexpr: cexpr . OP_PLUS mcexpr
+   44      | cexpr . OP_MINUS mcexpr
+
+    OP_PLUS   shift, and go to state 99
+    OP_MINUS  shift, and go to state 100
+    MK_RB     shift, and go to state 131
+
+
+状态 105
+
+   38 id_list: id_list MK_COMMA ID .
+   39        | id_list MK_COMMA ID . dim_decl
+
+    MK_LB  shift, and go to state 30
+
+    $default  reduce using rule 38 (id_list)
+
+    dim_decl  转到状态 132
+
+
+状态 106
+
+   19 dim_fn: MK_LB . expr_null MK_RB
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 22 (expr_null)
+
+    expr_null  转到状态 133
+    expr       转到状态 134
+    term       转到状态 52
+    factor     转到状态 53
+    var_ref    转到状态 54
+
+
+状态 107
+
+   18 param: ID ID dim_fn .
+   20 dim_fn: dim_fn . MK_LB expr MK_RB
+
+    MK_LB  shift, and go to state 135
+
+    $default  reduce using rule 18 (param)
+
+
+状态 108
+
+    7 function_decl: function_head MK_LPAREN opt_param_list MK_RPAREN MK_LBRACE . block MK_RBRACE
+
+    ID            shift, and go to state 136
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    TYPEDEF       shift, and go to state 5
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    $default  reduce using rule 26 (block)
+
+    block      转到状态 143
+    decl_list  转到状态 144
+    decl       转到状态 12
+    type_decl  转到状态 13
+    var_decl   转到状态 14
+    type       转到状态 145
+    stmt_list  转到状态 146
+    stmt       转到状态 147
+    var_ref    转到状态 148
+
+
+状态 109
+
+   13 param_list: param_list MK_COMMA param .
+
+    $default  reduce using rule 13 (param_list)
+
+
+状态 110
+
+   17 param: type ID dim_fn .
+   20 dim_fn: dim_fn . MK_LB expr MK_RB
+
+    MK_LB  shift, and go to state 135
+
+    $default  reduce using rule 17 (param)
+
+
+状态 111
+
+   91 expr: expr . add_op term
+  114 dim_list: MK_LB expr . MK_RB
+
+    OP_PLUS   shift, and go to state 91
+    OP_MINUS  shift, and go to state 92
+    MK_RB     shift, and go to state 149
+
+    add_op  转到状态 94
+
+
+状态 112
+
+   76 relop_expr: relop_expr . OP_OR relop_term
+   90 nonempty_relop_expr_list: relop_expr .
+
+    OP_OR  shift, and go to state 83
+
+    $default  reduce using rule 90 (nonempty_relop_expr_list)
+
+
+状态 113
+
+  105 factor: ID MK_LPAREN relop_expr_list . MK_RPAREN
+
+    MK_RPAREN  shift, and go to state 150
+
+
+状态 114
+
+   87 relop_expr_list: nonempty_relop_expr_list .
+   89 nonempty_relop_expr_list: nonempty_relop_expr_list . MK_COMMA relop_expr
+
+    MK_COMMA  shift, and go to state 151
+
+    $default  reduce using rule 87 (relop_expr_list)
+
+
+状态 115
+
+  113 dim_list: dim_list MK_LB . expr MK_RB
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    expr     转到状态 152
+    term     转到状态 52
+    factor   转到状态 53
+    var_ref  转到状态 54
+
+
+状态 116
+
+  107 factor: OP_NOT ID MK_LPAREN . relop_expr_list MK_RPAREN
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 88 (relop_expr_list)
+
+    relop_expr                转到状态 112
+    relop_term                转到状态 49
+    relop_factor              转到状态 50
+    relop_expr_list           转到状态 153
+    nonempty_relop_expr_list  转到状态 114
+    expr                      转到状态 51
+    term                      转到状态 52
+    factor                    转到状态 53
+    var_ref                   转到状态 54
+
+
+状态 117
+
+   76 relop_expr: relop_expr . OP_OR relop_term
+  101 factor: OP_NOT MK_LPAREN relop_expr . MK_RPAREN
+
+    OP_OR      shift, and go to state 83
+    MK_RPAREN  shift, and go to state 154
+
+
+状态 118
+
+  106 factor: OP_MINUS ID MK_LPAREN . relop_expr_list MK_RPAREN
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 88 (relop_expr_list)
+
+    relop_expr                转到状态 112
+    relop_term                转到状态 49
+    relop_factor              转到状态 50
+    relop_expr_list           转到状态 155
+    nonempty_relop_expr_list  转到状态 114
+    expr                      转到状态 51
+    term                      转到状态 52
+    factor                    转到状态 53
+    var_ref                   转到状态 54
+
+
+状态 119
+
+   76 relop_expr: relop_expr . OP_OR relop_term
+  100 factor: OP_MINUS MK_LPAREN relop_expr . MK_RPAREN
+
+    OP_OR      shift, and go to state 83
+    MK_RPAREN  shift, and go to state 156
+
+
+状态 120
+
+   99 factor: MK_LPAREN relop_expr MK_RPAREN .
+
+    $default  reduce using rule 99 (factor)
+
+
+状态 121
+
+   76 relop_expr: relop_expr OP_OR relop_term .
+   78 relop_term: relop_term . OP_AND relop_factor
+
+    OP_AND  shift, and go to state 84
+
+    $default  reduce using rule 76 (relop_expr)
+
+
+状态 122
+
+   78 relop_term: relop_term OP_AND relop_factor .
+
+    $default  reduce using rule 78 (relop_term)
+
+
+状态 123
+
+   80 relop_factor: expr rel_op expr .
+   91 expr: expr . add_op term
+
+    OP_PLUS   shift, and go to state 91
+    OP_MINUS  shift, and go to state 92
+
+    $default  reduce using rule 80 (relop_factor)
+
+    add_op  转到状态 94
+
+
+状态 124
+
+   91 expr: expr add_op term .
+   95 term: term . mul_op factor
+
+    OP_TIMES   shift, and go to state 95
+    OP_DIVIDE  shift, and go to state 96
+
+    $default  reduce using rule 91 (expr)
+
+    mul_op  转到状态 97
+
+
+状态 125
+
+   95 term: term mul_op factor .
+
+    $default  reduce using rule 95 (term)
+
+
+状态 126
+
+   50 cfactor: MK_LPAREN cexpr MK_RPAREN .
+
+    $default  reduce using rule 50 (cfactor)
+
+
+状态 127
+
+   43 cexpr: cexpr OP_PLUS mcexpr .
+   46 mcexpr: mcexpr . OP_TIMES cfactor
+   47       | mcexpr . OP_DIVIDE cfactor
+
+    OP_TIMES   shift, and go to state 102
+    OP_DIVIDE  shift, and go to state 103
+
+    $default  reduce using rule 43 (cexpr)
+
+
+状态 128
+
+   44 cexpr: cexpr OP_MINUS mcexpr .
+   46 mcexpr: mcexpr . OP_TIMES cfactor
+   47       | mcexpr . OP_DIVIDE cfactor
+
+    OP_TIMES   shift, and go to state 102
+    OP_DIVIDE  shift, and go to state 103
+
+    $default  reduce using rule 44 (cexpr)
+
+
+状态 129
+
+   46 mcexpr: mcexpr OP_TIMES cfactor .
+
+    $default  reduce using rule 46 (mcexpr)
+
+
+状态 130
+
+   47 mcexpr: mcexpr OP_DIVIDE cfactor .
+
+    $default  reduce using rule 47 (mcexpr)
+
+
+状态 131
+
+   42 dim_decl: dim_decl MK_LB cexpr MK_RB .
+
+    $default  reduce using rule 42 (dim_decl)
+
+
+状态 132
+
+   39 id_list: id_list MK_COMMA ID dim_decl .
+   42 dim_decl: dim_decl . MK_LB cexpr MK_RB
+
+    MK_LB  shift, and go to state 60
+
+    $default  reduce using rule 39 (id_list)
+
+
+状态 133
+
+   19 dim_fn: MK_LB expr_null . MK_RB
+
+    MK_RB  shift, and go to state 157
+
+
+状态 134
+
+   21 expr_null: expr .
+   91 expr: expr . add_op term
+
+    OP_PLUS   shift, and go to state 91
+    OP_MINUS  shift, and go to state 92
+
+    $default  reduce using rule 21 (expr_null)
+
+    add_op  转到状态 94
+
+
+状态 135
+
+   20 dim_fn: dim_fn MK_LB . expr MK_RB
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    expr     转到状态 158
+    term     转到状态 52
+    factor   转到状态 53
+    var_ref  转到状态 54
+
+
+状态 136
+
+   34 var_decl: ID . init_id_list MK_SEMICOLON
+   64 stmt: ID . MK_LPAREN relop_expr_list MK_RPAREN MK_SEMICOLON
+  111 var_ref: ID .
+  112        | ID . dim_list
+
+    ID         shift, and go to state 61
+    MK_LB      shift, and go to state 71
+    MK_LPAREN  shift, and go to state 159
+
+    $default  reduce using rule 111 (var_ref)
+
+    init_id_list  转到状态 17
+    init_id       转到状态 18
+    dim_list      转到状态 73
+
+
+状态 137
+
+   62 stmt: IF . MK_LPAREN test MK_RPAREN stmt
+   63     | IF . MK_LPAREN test MK_RPAREN stmt ELSE stmt
+
+    MK_LPAREN  shift, and go to state 160
+
+
+状态 138
+
+   59 stmt: WHILE . MK_LPAREN test MK_RPAREN stmt
+
+    MK_LPAREN  shift, and go to state 161
+
+
+状态 139
+
+   60 stmt: FOR . MK_LPAREN assign_expr_list MK_SEMICOLON relop_expr_list MK_SEMICOLON assign_expr_list MK_RPAREN stmt
+
+    MK_LPAREN  shift, and go to state 162
+
+
+状态 140
+
+   58 stmt: MK_LBRACE . block MK_RBRACE
+
+    ID            shift, and go to state 136
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    TYPEDEF       shift, and go to state 5
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    $default  reduce using rule 26 (block)
+
+    block      转到状态 163
+    decl_list  转到状态 144
+    decl       转到状态 12
+    type_decl  转到状态 13
+    var_decl   转到状态 14
+    type       转到状态 145
+    stmt_list  转到状态 146
+    stmt       转到状态 147
+    var_ref    转到状态 148
+
+
+状态 141
+
+   65 stmt: MK_SEMICOLON .
+
+    $default  reduce using rule 65 (stmt)
+
+
+状态 142
+
+   66 stmt: RETURN . MK_SEMICOLON
+   67     | RETURN . relop_expr MK_SEMICOLON
+
+    ID            shift, and go to state 43
+    CONST         shift, and go to state 44
+    OP_NOT        shift, and go to state 45
+    OP_MINUS      shift, and go to state 46
+    MK_LPAREN     shift, and go to state 47
+    MK_SEMICOLON  shift, and go to state 164
+
+    relop_expr    转到状态 165
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 143
+
+    7 function_decl: function_head MK_LPAREN opt_param_list MK_RPAREN MK_LBRACE block . MK_RBRACE
+
+    MK_RBRACE  shift, and go to state 166
+
+
+状态 144
+
+   23 block: decl_list . stmt_list
+   25      | decl_list .
+   27 decl_list: decl_list . decl
+
+    ID            shift, and go to state 136
+    INT           shift, and go to state 3
+    FLOAT         shift, and go to state 4
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    TYPEDEF       shift, and go to state 5
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    $default  reduce using rule 25 (block)
+
+    decl       转到状态 26
+    type_decl  转到状态 13
+    var_decl   转到状态 14
+    type       转到状态 145
+    stmt_list  转到状态 167
+    stmt       转到状态 147
+    var_ref    转到状态 148
+
+
+状态 145
+
+   33 var_decl: type . init_id_list MK_SEMICOLON
+
+    ID  shift, and go to state 61
+
+    init_id_list  转到状态 28
+    init_id       转到状态 18
+
+
+状态 146
+
+   24 block: stmt_list .
+   56 stmt_list: stmt_list . stmt
+
+    ID            shift, and go to state 168
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    $default  reduce using rule 24 (block)
+
+    stmt     转到状态 169
+    var_ref  转到状态 148
+
+
+状态 147
+
+   57 stmt_list: stmt .
+
+    $default  reduce using rule 57 (stmt_list)
+
+
+状态 148
+
+   61 stmt: var_ref . OP_ASSIGN relop_expr MK_SEMICOLON
+
+    OP_ASSIGN  shift, and go to state 170
+
+
+状态 149
+
+  114 dim_list: MK_LB expr MK_RB .
+
+    $default  reduce using rule 114 (dim_list)
+
+
+状态 150
+
+  105 factor: ID MK_LPAREN relop_expr_list MK_RPAREN .
+
+    $default  reduce using rule 105 (factor)
+
+
+状态 151
+
+   89 nonempty_relop_expr_list: nonempty_relop_expr_list MK_COMMA . relop_expr
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_expr    转到状态 171
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 152
+
+   91 expr: expr . add_op term
+  113 dim_list: dim_list MK_LB expr . MK_RB
+
+    OP_PLUS   shift, and go to state 91
+    OP_MINUS  shift, and go to state 92
+    MK_RB     shift, and go to state 172
+
+    add_op  转到状态 94
+
+
+状态 153
+
+  107 factor: OP_NOT ID MK_LPAREN relop_expr_list . MK_RPAREN
+
+    MK_RPAREN  shift, and go to state 173
+
+
+状态 154
+
+  101 factor: OP_NOT MK_LPAREN relop_expr MK_RPAREN .
+
+    $default  reduce using rule 101 (factor)
+
+
+状态 155
+
+  106 factor: OP_MINUS ID MK_LPAREN relop_expr_list . MK_RPAREN
+
+    MK_RPAREN  shift, and go to state 174
+
+
+状态 156
+
+  100 factor: OP_MINUS MK_LPAREN relop_expr MK_RPAREN .
+
+    $default  reduce using rule 100 (factor)
+
+
+状态 157
+
+   19 dim_fn: MK_LB expr_null MK_RB .
+
+    $default  reduce using rule 19 (dim_fn)
+
+
+状态 158
+
+   20 dim_fn: dim_fn MK_LB expr . MK_RB
+   91 expr: expr . add_op term
+
+    OP_PLUS   shift, and go to state 91
+    OP_MINUS  shift, and go to state 92
+    MK_RB     shift, and go to state 175
+
+    add_op  转到状态 94
+
+
+状态 159
+
+   64 stmt: ID MK_LPAREN . relop_expr_list MK_RPAREN MK_SEMICOLON
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 88 (relop_expr_list)
+
+    relop_expr                转到状态 112
+    relop_term                转到状态 49
+    relop_factor              转到状态 50
+    relop_expr_list           转到状态 176
+    nonempty_relop_expr_list  转到状态 114
+    expr                      转到状态 51
+    term                      转到状态 52
+    factor                    转到状态 53
+    var_ref                   转到状态 54
+
+
+状态 160
+
+   62 stmt: IF MK_LPAREN . test MK_RPAREN stmt
+   63     | IF MK_LPAREN . test MK_RPAREN stmt ELSE stmt
+
+    ID         shift, and go to state 177
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    test          转到状态 178
+    assign_expr   转到状态 179
+    relop_expr    转到状态 180
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 161
+
+   59 stmt: WHILE MK_LPAREN . test MK_RPAREN stmt
+
+    ID         shift, and go to state 177
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    test          转到状态 181
+    assign_expr   转到状态 179
+    relop_expr    转到状态 180
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 162
+
+   60 stmt: FOR MK_LPAREN . assign_expr_list MK_SEMICOLON relop_expr_list MK_SEMICOLON assign_expr_list MK_RPAREN stmt
+
+    ID         shift, and go to state 177
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 69 (assign_expr_list)
+
+    assign_expr_list           转到状态 182
+    nonempty_assign_expr_list  转到状态 183
+    assign_expr                转到状态 184
+    relop_expr                 转到状态 180
+    relop_term                 转到状态 49
+    relop_factor               转到状态 50
+    expr                       转到状态 51
+    term                       转到状态 52
+    factor                     转到状态 53
+    var_ref                    转到状态 54
+
+
+状态 163
+
+   58 stmt: MK_LBRACE block . MK_RBRACE
+
+    MK_RBRACE  shift, and go to state 185
+
+
+状态 164
+
+   66 stmt: RETURN MK_SEMICOLON .
+
+    $default  reduce using rule 66 (stmt)
+
+
+状态 165
+
+   67 stmt: RETURN relop_expr . MK_SEMICOLON
+   76 relop_expr: relop_expr . OP_OR relop_term
+
+    OP_OR         shift, and go to state 83
+    MK_SEMICOLON  shift, and go to state 186
+
+
+状态 166
+
+    7 function_decl: function_head MK_LPAREN opt_param_list MK_RPAREN MK_LBRACE block MK_RBRACE .
+
+    $default  reduce using rule 7 (function_decl)
+
+
+状态 167
+
+   23 block: decl_list stmt_list .
+   56 stmt_list: stmt_list . stmt
+
+    ID            shift, and go to state 168
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    $default  reduce using rule 23 (block)
+
+    stmt     转到状态 169
+    var_ref  转到状态 148
+
+
+状态 168
+
+   64 stmt: ID . MK_LPAREN relop_expr_list MK_RPAREN MK_SEMICOLON
+  111 var_ref: ID .
+  112        | ID . dim_list
+
+    MK_LB      shift, and go to state 71
+    MK_LPAREN  shift, and go to state 159
+
+    $default  reduce using rule 111 (var_ref)
+
+    dim_list  转到状态 73
+
+
+状态 169
+
+   56 stmt_list: stmt_list stmt .
+
+    $default  reduce using rule 56 (stmt_list)
+
+
+状态 170
+
+   61 stmt: var_ref OP_ASSIGN . relop_expr MK_SEMICOLON
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_expr    转到状态 187
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 171
+
+   76 relop_expr: relop_expr . OP_OR relop_term
+   89 nonempty_relop_expr_list: nonempty_relop_expr_list MK_COMMA relop_expr .
+
+    OP_OR  shift, and go to state 83
+
+    $default  reduce using rule 89 (nonempty_relop_expr_list)
+
+
+状态 172
+
+  113 dim_list: dim_list MK_LB expr MK_RB .
+
+    $default  reduce using rule 113 (dim_list)
+
+
+状态 173
+
+  107 factor: OP_NOT ID MK_LPAREN relop_expr_list MK_RPAREN .
+
+    $default  reduce using rule 107 (factor)
+
+
+状态 174
+
+  106 factor: OP_MINUS ID MK_LPAREN relop_expr_list MK_RPAREN .
+
+    $default  reduce using rule 106 (factor)
+
+
+状态 175
+
+   20 dim_fn: dim_fn MK_LB expr MK_RB .
+
+    $default  reduce using rule 20 (dim_fn)
+
+
+状态 176
+
+   64 stmt: ID MK_LPAREN relop_expr_list . MK_RPAREN MK_SEMICOLON
+
+    MK_RPAREN  shift, and go to state 188
+
+
+状态 177
+
+   73 assign_expr: ID . OP_ASSIGN relop_expr
+  105 factor: ID . MK_LPAREN relop_expr_list MK_RPAREN
+  111 var_ref: ID .
+  112        | ID . dim_list
+
+    OP_ASSIGN  shift, and go to state 189
+    MK_LB      shift, and go to state 71
+    MK_LPAREN  shift, and go to state 72
+
+    $default  reduce using rule 111 (var_ref)
+
+    dim_list  转到状态 73
+
+
+状态 178
+
+   62 stmt: IF MK_LPAREN test . MK_RPAREN stmt
+   63     | IF MK_LPAREN test . MK_RPAREN stmt ELSE stmt
+
+    MK_RPAREN  shift, and go to state 190
+
+
+状态 179
+
+   72 test: assign_expr .
+
+    $default  reduce using rule 72 (test)
+
+
+状态 180
+
+   74 assign_expr: relop_expr .
+   76 relop_expr: relop_expr . OP_OR relop_term
+
+    OP_OR  shift, and go to state 83
+
+    $default  reduce using rule 74 (assign_expr)
+
+
+状态 181
+
+   59 stmt: WHILE MK_LPAREN test . MK_RPAREN stmt
+
+    MK_RPAREN  shift, and go to state 191
+
+
+状态 182
+
+   60 stmt: FOR MK_LPAREN assign_expr_list . MK_SEMICOLON relop_expr_list MK_SEMICOLON assign_expr_list MK_RPAREN stmt
+
+    MK_SEMICOLON  shift, and go to state 192
+
+
+状态 183
+
+   68 assign_expr_list: nonempty_assign_expr_list .
+   70 nonempty_assign_expr_list: nonempty_assign_expr_list . MK_COMMA assign_expr
+
+    MK_COMMA  shift, and go to state 193
+
+    $default  reduce using rule 68 (assign_expr_list)
+
+
+状态 184
+
+   71 nonempty_assign_expr_list: assign_expr .
+
+    $default  reduce using rule 71 (nonempty_assign_expr_list)
+
+
+状态 185
+
+   58 stmt: MK_LBRACE block MK_RBRACE .
+
+    $default  reduce using rule 58 (stmt)
+
+
+状态 186
+
+   67 stmt: RETURN relop_expr MK_SEMICOLON .
+
+    $default  reduce using rule 67 (stmt)
+
+
+状态 187
+
+   61 stmt: var_ref OP_ASSIGN relop_expr . MK_SEMICOLON
+   76 relop_expr: relop_expr . OP_OR relop_term
+
+    OP_OR         shift, and go to state 83
+    MK_SEMICOLON  shift, and go to state 194
+
+
+状态 188
+
+   64 stmt: ID MK_LPAREN relop_expr_list MK_RPAREN . MK_SEMICOLON
+
+    MK_SEMICOLON  shift, and go to state 195
+
+
+状态 189
+
+   73 assign_expr: ID OP_ASSIGN . relop_expr
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    relop_expr    转到状态 196
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 190
+
+   62 stmt: IF MK_LPAREN test MK_RPAREN . stmt
+   63     | IF MK_LPAREN test MK_RPAREN . stmt ELSE stmt
+
+    ID            shift, and go to state 168
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    stmt     转到状态 197
+    var_ref  转到状态 148
+
+
+状态 191
+
+   59 stmt: WHILE MK_LPAREN test MK_RPAREN . stmt
+
+    ID            shift, and go to state 168
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    stmt     转到状态 198
+    var_ref  转到状态 148
+
+
+状态 192
+
+   60 stmt: FOR MK_LPAREN assign_expr_list MK_SEMICOLON . relop_expr_list MK_SEMICOLON assign_expr_list MK_RPAREN stmt
+
+    ID         shift, and go to state 43
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 88 (relop_expr_list)
+
+    relop_expr                转到状态 112
+    relop_term                转到状态 49
+    relop_factor              转到状态 50
+    relop_expr_list           转到状态 199
+    nonempty_relop_expr_list  转到状态 114
+    expr                      转到状态 51
+    term                      转到状态 52
+    factor                    转到状态 53
+    var_ref                   转到状态 54
+
+
+状态 193
+
+   70 nonempty_assign_expr_list: nonempty_assign_expr_list MK_COMMA . assign_expr
+
+    ID         shift, and go to state 177
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    assign_expr   转到状态 200
+    relop_expr    转到状态 180
+    relop_term    转到状态 49
+    relop_factor  转到状态 50
+    expr          转到状态 51
+    term          转到状态 52
+    factor        转到状态 53
+    var_ref       转到状态 54
+
+
+状态 194
+
+   61 stmt: var_ref OP_ASSIGN relop_expr MK_SEMICOLON .
+
+    $default  reduce using rule 61 (stmt)
+
+
+状态 195
+
+   64 stmt: ID MK_LPAREN relop_expr_list MK_RPAREN MK_SEMICOLON .
+
+    $default  reduce using rule 64 (stmt)
+
+
+状态 196
+
+   73 assign_expr: ID OP_ASSIGN relop_expr .
+   76 relop_expr: relop_expr . OP_OR relop_term
+
+    OP_OR  shift, and go to state 83
+
+    $default  reduce using rule 73 (assign_expr)
+
+
+状态 197
+
+   62 stmt: IF MK_LPAREN test MK_RPAREN stmt .
+   63     | IF MK_LPAREN test MK_RPAREN stmt . ELSE stmt
+
+    ELSE  shift, and go to state 201
+
+    ELSE      [reduce using rule 62 (stmt)]
+    $default  reduce using rule 62 (stmt)
+
+
+状态 198
+
+   59 stmt: WHILE MK_LPAREN test MK_RPAREN stmt .
+
+    $default  reduce using rule 59 (stmt)
+
+
+状态 199
+
+   60 stmt: FOR MK_LPAREN assign_expr_list MK_SEMICOLON relop_expr_list . MK_SEMICOLON assign_expr_list MK_RPAREN stmt
+
+    MK_SEMICOLON  shift, and go to state 202
+
+
+状态 200
+
+   70 nonempty_assign_expr_list: nonempty_assign_expr_list MK_COMMA assign_expr .
+
+    $default  reduce using rule 70 (nonempty_assign_expr_list)
+
+
+状态 201
+
+   63 stmt: IF MK_LPAREN test MK_RPAREN stmt ELSE . stmt
+
+    ID            shift, and go to state 168
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    stmt     转到状态 203
+    var_ref  转到状态 148
+
+
+状态 202
+
+   60 stmt: FOR MK_LPAREN assign_expr_list MK_SEMICOLON relop_expr_list MK_SEMICOLON . assign_expr_list MK_RPAREN stmt
+
+    ID         shift, and go to state 177
+    CONST      shift, and go to state 44
+    OP_NOT     shift, and go to state 45
+    OP_MINUS   shift, and go to state 46
+    MK_LPAREN  shift, and go to state 47
+
+    $default  reduce using rule 69 (assign_expr_list)
+
+    assign_expr_list           转到状态 204
+    nonempty_assign_expr_list  转到状态 183
+    assign_expr                转到状态 184
+    relop_expr                 转到状态 180
+    relop_term                 转到状态 49
+    relop_factor               转到状态 50
+    expr                       转到状态 51
+    term                       转到状态 52
+    factor                     转到状态 53
+    var_ref                    转到状态 54
+
+
+状态 203
+
+   63 stmt: IF MK_LPAREN test MK_RPAREN stmt ELSE stmt .
+
+    $default  reduce using rule 63 (stmt)
+
+
+状态 204
+
+   60 stmt: FOR MK_LPAREN assign_expr_list MK_SEMICOLON relop_expr_list MK_SEMICOLON assign_expr_list . MK_RPAREN stmt
+
+    MK_RPAREN  shift, and go to state 205
+
+
+状态 205
+
+   60 stmt: FOR MK_LPAREN assign_expr_list MK_SEMICOLON relop_expr_list MK_SEMICOLON assign_expr_list MK_RPAREN . stmt
+
+    ID            shift, and go to state 168
+    IF            shift, and go to state 137
+    WHILE         shift, and go to state 138
+    FOR           shift, and go to state 139
+    MK_LBRACE     shift, and go to state 140
+    MK_SEMICOLON  shift, and go to state 141
+    RETURN        shift, and go to state 142
+
+    stmt     转到状态 206
+    var_ref  转到状态 148
+
+
+状态 206
+
+   60 stmt: FOR MK_LPAREN assign_expr_list MK_SEMICOLON relop_expr_list MK_SEMICOLON assign_expr_list MK_RPAREN stmt .
+
+    $default  reduce using rule 60 (stmt)

@@ -766,11 +766,15 @@ char *argv[];
 
      semanticAnalysis(prog);
 
+
      symbolTableEnd();
      if (!g_anyErrorOccur) {
         printf("Parsing completed. No errors found.\n");
      }
 
+     freopen("output.s","w",stdout);//need to be changed to output.s
+
+     code_gen(prog);
      
   } /* main */
 
